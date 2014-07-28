@@ -8,11 +8,13 @@
 #   - nfs
 #   - the git tools.
 
-$arAliases = [
-  { alias => 'git', destination => '/var/git' } 
-             ]
+$arAliases = {
+  'git' => '/var/git',
+  'test' => '/var/test',
+}  
 
 class { "lighttpd":
+  harAliasMappings => $arAliases,
 }
 
 # TODO C open the Firewalld ports.
