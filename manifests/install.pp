@@ -18,5 +18,10 @@ class { "lighttpd":
 }
 
 # TODO C open the Firewalld ports.
+# define a service
+firewalld::service { 'web':
+        description     => 'Web service',
+        ports           => [{port => '80', protocol => 'tcp',},],
+}
 
 # TODO C Disable selinux.
