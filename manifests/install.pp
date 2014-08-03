@@ -17,8 +17,14 @@ $arAliases = {
 }  
 
 # TODO C depend lighttpd on the GIT class
-class { "lighttpd":
+class { 'lighttpd':
   harAliasMappings => $arAliases,
+}
+
+# TODO V Add this to both class instantiation:  szWebProcessOwnerName =>  
+class { 'gitserver':
+  szGitDirectory => $szGitTopDir,
+  require        => Class ['lighttpd'],
 }
 
 # TODO C open the Firewalld ports.
