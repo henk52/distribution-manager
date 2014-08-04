@@ -13,7 +13,7 @@ $szGitTopDir = '/var/git'
 # TODO C Create git dir.
 
 $arAliases = {
-  'git' => "$szGitTopDir",
+  '/git' => "$szGitTopDir",
 }  
 
 # TODO C depend lighttpd on the GIT class
