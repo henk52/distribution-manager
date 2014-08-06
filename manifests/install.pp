@@ -7,6 +7,12 @@
 #   - web
 #   - nfs
 #   - the git tools.
+#   - DHCP/TFTP servers, dnsmasq(bootserver)
+
+
+$szIpAddressForDHCPServer = '10.1.2.3'
+$szIpAddressSubnet = '10.1.2'
+#$szWebProcessOwnerName = 'lighttpd'
 
 $szGitTopDir = '/var/git'
 # TODO C define the GIT user.
@@ -19,6 +25,7 @@ $arAliases = {
 # TODO C depend lighttpd on the GIT class
 class { 'lighttpd':
   harAliasMappings => $arAliases,
+  szWebProcessOwnerName => $szWebProcessOwnerName,
 }
 
 # TODO V Add this to both class instantiation:  szWebProcessOwnerName =>  
@@ -45,3 +52,9 @@ service { 'firewalld':
 }
 
 # TODO C Disable selinux.
+
+class { 'bootserver':
+  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
+  szClassCSubnetAddress => $szIpAddressSubnet,
+  szWebProcessOwnerName => $szWebProcessOwnerName,
+}
