@@ -10,8 +10,8 @@
 #   - DHCP/TFTP servers, dnsmasq(bootserver)
 
 
-$szIpAddressForDHCPServer = '10.1.2.3'
-$szIpAddressSubnet = '10.1.2'
+#$szIpAddressForDHCPServer = '10.1.2.3'
+#$szIpAddressSubnet = '10.1.2'
 #$szWebProcessOwnerName = 'lighttpd'
 
 $szGitTopDir = '/var/git'
@@ -54,7 +54,7 @@ service { 'firewalld':
 # TODO C Disable selinux.
 
 class { 'bootserver':
-  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
-  szClassCSubnetAddress => $szIpAddressSubnet,
+#  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
+#  szClassCSubnetAddress => $szIpAddressSubnet,
   szWebProcessOwnerName => $szWebProcessOwnerName,
 }
