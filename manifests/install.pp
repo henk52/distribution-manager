@@ -36,7 +36,7 @@ class { 'gitserver':
 
 # TODO C open the Firewalld ports.
 firewalld::zone { 'public':
-  services => ['ssh', 'http', 'vnc-server'],
+  services => ['ssh', 'dhcp', 'dns', 'http', 'tftp', 'vnc-server'],
 }
 
 
