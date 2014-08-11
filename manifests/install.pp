@@ -34,6 +34,9 @@ class { 'gitserver':
   require        => Class ['lighttpd'],
 }
 
+class { 'bst':
+}
+
 # TODO C open the Firewalld ports.
 firewalld::zone { 'public':
   services => ['ssh', 'dhcp', 'dns', 'http', 'tftp', 'vnc-server'],
