@@ -14,6 +14,8 @@
 #$szIpAddressSubnet = '10.1.2'
 #$szWebProcessOwnerName = 'lighttpd'
 
+$szKickStartBaseDirectory = '/var/ks'
+
 $szGitTopDir = '/var/git'
 # TODO C define the GIT user.
 # TODO C Create git dir.
@@ -22,10 +24,30 @@ $arAliases = {
   '/git' => "$szGitTopDir",
 }  
 
+$szDefaultNfsOptionList =  'ro,no_root_squash'
+$szDefaultNfsClientList = hiera ( 'DefaultNfsClientList' )
+
+$hNfsExports = {
+ "$szKickStartBaseDirectory/configs" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
+ "$szKickStartBaseDirectory/images" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
+}
+
 # TODO C depend lighttpd on the GIT class
 class { 'lighttpd':
   harAliasMappings => $arAliases,
   szWebProcessOwnerName => $szWebProcessOwnerName,
+}
+
+
+class { 'nfsserver':
+   hohNfsExports => $hNfsExports,
+#  NfsExport => $arNfsExports,
 }
 
 # TODO V Add this to both class instantiation:  szWebProcessOwnerName =>  
