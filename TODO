@@ -1,5 +1,1 @@
-Test GIT server.
-Create the boot server thingy on github.
-Instantiate the boot server.
-Validate the boot server.
-Get the access to work.
+TODO C figure out how to fix the Firewall not allowing sunrpc(111/tcp)

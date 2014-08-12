@@ -32,7 +32,7 @@ $hNfsExports = {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
- "$szKickStartBaseDirectory/images" => {
+ "$szKickStartBaseDirectory/images/fedora_20_x86_64" => {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
@@ -60,8 +60,24 @@ class { 'bst':
 }
 
 # TODO C open the Firewalld ports.
-firewalld::zone { 'public':
-  services => ['ssh', 'dhcp', 'dns', 'http', 'tftp', 'vnc-server'],
+#firewalld::zone { 'public':
+#  services => ['ssh', 'vnc-server'],
+#}
+##  services => ['ssh', 'dhcp', 'dns', 'http', 'nfs', 'rpc-bind', 'tftp', 'vnc-server'],
+#
+#firewalld::zone { 'internal':
+#  interfaces => [ 'enp3s0' ],
+#  services   => ['ssh', 'dhcp', 'dns', 'http', 'nfs', 'tftp', 'vnc-server'],
+#  ports      => [{
+#     comment         => 'sunrpc',
+#     port            => '111',
+#     protocol        => 'tcp',
+#                },],
+#}
+
+service { 'firewalld':
+  enable => false,
+  ensure => stopped,
 }
 
 
@@ -71,10 +87,10 @@ firewalld::zone { 'public':
 package { 'firewalld':
   ensure => present,
 }
-service { 'firewalld':
-                ensure     => running,  # ensure it's running
-                enable     => true,     # start on boot
-}
+#service { 'firewalld':
+#                ensure     => running,  # ensure it's running
+#                enable     => true,     # start on boot
+#}
 
 # TODO C Disable selinux.
 
