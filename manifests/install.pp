@@ -32,11 +32,20 @@ $hNfsExports = {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
- "$szKickStartBaseDirectory/images" => {
+ "/home/ks/repo/linux/releases/20/Fedora/x86_64/os" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
+ "/home/ks/repo/linux/updates/20/x86_64" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
+ "/home/ks/repo/linux/releases/20/Everything/x86_64/os" => {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
 }
+# "$szKickStartBaseDirectory/images" => {
 # "$szKickStartBaseDirectory/images/fedora_20_x86_64" => {
 
 # TODO C depend lighttpd on the GIT class
