@@ -14,15 +14,32 @@
 #$szIpAddressSubnet = '10.1.2'
 #$szWebProcessOwnerName = 'lighttpd'
 
+$szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
+
 $szKickStartBaseDirectory = '/var/ks'
 
 $szGitTopDir = '/var/git'
+
+# Directory where the hiera conf files are stored.
+$szHieraConfigsDir = '/var/hieraconfs'
+
 # TODO C define the GIT user.
 # TODO C Create git dir.
 
 $arAliases = {
   '/git' => "$szGitTopDir",
+  '/hieraconfs' => "$szHieraConfigsDir",
 }  
+
+file { "$szHieraConfigsDir":
+  ensure => directory,
+}
+
+file { "$szHieraConfigsDir/git_web_host_conf.yaml":
+  ensure  => present,
+  require => File [ "$szHieraConfigsDir" ],
+  content => template('distribution-manager/git_web_host_conf_yaml.erb'),
+}
 
 $szDefaultNfsOptionList =  'ro,no_root_squash'
 $szDefaultNfsClientList = hiera ( 'DefaultNfsClientList' )
@@ -32,15 +49,7 @@ $hNfsExports = {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
- "/home/ks/repo/linux/releases/20/Fedora/x86_64/os" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
- "/home/ks/repo/linux/updates/20/x86_64" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
- "/home/ks/repo/linux/releases/20/Everything/x86_64/os" => {
+ "/home/ks" => {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
