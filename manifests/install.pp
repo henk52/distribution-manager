@@ -29,6 +29,7 @@ $szHieraConfigsDir = '/var/hieraconfs'
 $arAliases = {
   '/git' => "$szGitTopDir",
   '/hieraconfs' => "$szHieraConfigsDir",
+  '/images'     => '/home/ks/repo/linux',
 }  
 
 file { "$szHieraConfigsDir":
