@@ -118,4 +118,5 @@ class { 'bootserver':
 #  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
 #  szClassCSubnetAddress => $szIpAddressSubnet,
   szWebProcessOwnerName => $szWebProcessOwnerName,
+  require        => Class ['lighttpd'],
 }
