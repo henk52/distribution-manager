@@ -16,7 +16,7 @@
 
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
-$szKickStartBaseDirectory = '/var/ks'
+$szKickStartBaseDirectory = hieara('KickStartBaseDirectory', '/var/ks')
 
 $szGitTopDir = '/var/git'
 
