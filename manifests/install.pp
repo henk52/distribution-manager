@@ -19,6 +19,7 @@ $szWebProcessOwnerName = 'apache'
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
+$szKickStartImageDirectory = hiera('KickStartImageDirectory', '/var/ks/images')
 
 $szGitTopDir = '/var/git'
 
@@ -107,8 +108,9 @@ class { 'gitserver':
 }
 
 class { 'bst':
-  szWebProcessOwnerName    => "$szWebProcessOwnerName",
-  szKickStartBaseDirectory => "$szKickStartBaseDirectory",
+  szWebProcessOwnerName     => "$szWebProcessOwnerName",
+  szKickStartBaseDirectory  => "$szKickStartBaseDirectory",
+  szKickStartImageDirectory => "$szKickStartImageDirectory",
 }
 
 # TODO C open the Firewalld ports.
