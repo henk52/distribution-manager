@@ -19,7 +19,7 @@ $szWebProcessOwnerName = 'apache'
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
-$szKickStartImageDirectory = hiera('KickStartImageDirectory', '/var/ks/images')
+$szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
 
 $szGitTopDir = '/var/git'
 
@@ -48,6 +48,10 @@ file { "$szHieraConfigsDir":
   ensure => directory,
 }
 
+file { "$szKickStartBaseDirectory":
+  ensure => directory,
+}
+
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
   ensure  => present,
   require => File [ "$szHieraConfigsDir" ],
@@ -62,13 +66,11 @@ $hNfsExports = {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
- "/home/ks" => {
+ "$szKickStartBaseDirectory" => {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
 }
-# "$szKickStartBaseDirectory/images" => {
-# "$szKickStartBaseDirectory/images/fedora_20_x86_64" => {
 
 # TODO C depend lighttpd on the GIT class
 #class { 'lighttpd':
