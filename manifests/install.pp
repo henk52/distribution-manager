@@ -40,16 +40,22 @@ $arAliases = [
   },
   {
     alias => '/images',
-    path  => "$szKickStartBaseDirectory",
+    path  => "$szKickStartImageDirectory",
   }
 ]  
 
-file { "$szHieraConfigsDir":
+file { "$szKickStartBaseDirectory":
   ensure => directory,
 }
 
-file { "$szKickStartBaseDirectory":
+file { "$szHieraConfigsDir":
   ensure => directory,
+  requires => File [ "$szKickStartBaseDirectory" ],
+}
+
+file { "$szKickStartImageDirectory":
+  ensure => directory,
+  requires => File [ "$szKickStartBaseDirectory" ],
 }
 
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
