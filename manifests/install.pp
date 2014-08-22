@@ -107,6 +107,8 @@ class { 'gitserver':
 }
 
 class { 'bst':
+  szWebProcessOwnerName    => "$szWebProcessOwnerName",
+  szKickStartBaseDirectory => "$szKickStartBaseDirectory",
 }
 
 # TODO C open the Firewalld ports.
