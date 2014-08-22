@@ -9,14 +9,16 @@
 #   - the git tools.
 #   - DHCP/TFTP servers, dnsmasq(bootserver)
 
+$szWebServerPackage = 'apache'
 
 #$szIpAddressForDHCPServer = '10.1.2.3'
 #$szIpAddressSubnet = '10.1.2'
 #$szWebProcessOwnerName = 'lighttpd'
+$szWebProcessOwnerName = 'apache'
 
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
-$szKickStartBaseDirectory = hieara('KickStartBaseDirectory', '/var/ks')
+$szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
 
 $szGitTopDir = '/var/git'
 
@@ -26,11 +28,20 @@ $szHieraConfigsDir = '/var/hieraconfs'
 # TODO C define the GIT user.
 # TODO C Create git dir.
 
-$arAliases = {
-  '/git' => "$szGitTopDir",
-  '/hieraconfs' => "$szHieraConfigsDir",
-  '/images'     => '/home/ks/repo/linux',
-}  
+$arAliases = [
+  { 
+    alias => '/git',
+    path  => "$szGitTopDir",
+  },
+  {
+    alias => '/hieraconfs',
+    path  => "$szHieraConfigsDir",
+  },
+  {
+    alias => '/images',
+    path  => "$szKickStartBaseDirectory",
+  }
+]  
 
 file { "$szHieraConfigsDir":
   ensure => directory,
@@ -59,9 +70,26 @@ $hNfsExports = {
 # "$szKickStartBaseDirectory/images/fedora_20_x86_64" => {
 
 # TODO C depend lighttpd on the GIT class
-class { 'lighttpd':
-  harAliasMappings => $arAliases,
-  szWebProcessOwnerName => $szWebProcessOwnerName,
+#class { 'lighttpd':
+#  harAliasMappings => $arAliases,
+#  szWebProcessOwnerName => $szWebProcessOwnerName,
+#}
+
+
+# Base class. Turn off the default vhosts; we will be declaring
+# all vhosts below.
+class { 'apache':
+  default_vhost => false,
+}
+
+
+
+apache::vhost { 'subdomain.example.com':
+  ip      => "$szRepoWebHostAddr",
+  ip_based => true,
+  port    => '80',
+  docroot => '/var/www/subdomain',
+  aliases => $arAliases,
 }
 
 
@@ -72,8 +100,10 @@ class { 'nfsserver':
 
 # TODO V Add this to both class instantiation:  szWebProcessOwnerName =>  
 class { 'gitserver':
-  szGitDirectory => $szGitTopDir,
-  require        => Class ['lighttpd'],
+  szWebServerPackage    => "$szWebServerPackage",
+  szWebProcessOwnerName => "$szWebProcessOwnerName",
+  szGitDirectory        => "$szGitTopDir",
+  require               => Class ["$szWebServerPackage"],
 }
 
 class { 'bst':
@@ -118,5 +148,5 @@ class { 'bootserver':
 #  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
 #  szClassCSubnetAddress => $szIpAddressSubnet,
   szWebProcessOwnerName => $szWebProcessOwnerName,
-  require        => Class ['lighttpd'],
+  require        => Class ['apache'],
 }
