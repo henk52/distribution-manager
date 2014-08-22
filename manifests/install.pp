@@ -50,12 +50,12 @@ file { "$szKickStartBaseDirectory":
 
 file { "$szHieraConfigsDir":
   ensure => directory,
-  requires => File [ "$szKickStartBaseDirectory" ],
+  require => File [ "$szKickStartBaseDirectory" ],
 }
 
 file { "$szKickStartImageDirectory":
   ensure => directory,
-  requires => File [ "$szKickStartBaseDirectory" ],
+  require => File [ "$szKickStartBaseDirectory" ],
 }
 
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
