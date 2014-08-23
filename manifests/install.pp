@@ -44,19 +44,20 @@ $arAliases = [
   }
 ]  
 
-file { "$szKickStartBaseDirectory":
-  ensure => directory,
-}
+#file { "$szKickStartBaseDirectory":
+#  ensure => directory,
+#}
 
+# TODO Should this also be moved to the boot server module?
 file { "$szHieraConfigsDir":
   ensure => directory,
   require => File [ "$szKickStartBaseDirectory" ],
 }
 
-file { "$szKickStartImageDirectory":
-  ensure => directory,
-  require => File [ "$szKickStartBaseDirectory" ],
-}
+#file { "$szKickStartImageDirectory":
+#  ensure => directory,
+#  require => File [ "$szKickStartBaseDirectory" ],
+#}
 
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
   ensure  => present,
