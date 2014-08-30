@@ -23,16 +23,25 @@ $szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseD
 
 $szGitTopDir = '/var/git'
 
+$szWebStorageDir = '/var/webstorage'
+
 # Directory where the hiera conf files are stored.
 $szHieraConfigsDir = '/var/hieraconfs'
 
 # TODO C define the GIT user.
-# TODO C Create git dir.
+
+file { "$szWebStorageDir":
+  ensure => directory,
+}
 
 $arAliases = [
   { 
     alias => '/git',
     path  => "$szGitTopDir",
+  },
+  { 
+    alias => '/storage',
+    path  => "$szWebStorageDir",
   },
   {
     alias => '/hieraconfs',
@@ -95,6 +104,7 @@ class { 'apache':
 
 
 apache::vhost { 'subdomain.example.com':
+  ensure  => present,
   ip      => "$szRepoWebHostAddr",
   ip_based => true,
   port    => '80',
