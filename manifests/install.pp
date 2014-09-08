@@ -111,13 +111,19 @@ class { 'apache':
 
 
 
+# TODO C Move the 'directories' directive from a harcode, to a configurable thing.
 apache::vhost { 'subdomain.example.com':
-  ensure  => present,
-  ip      => "$szRepoWebHostAddr",
-  ip_based => true,
-  port    => '80',
-  docroot => '/var/www/subdomain',
-  aliases => $arAliases,
+  ensure         => present,
+  ip             => "$szRepoWebHostAddr",
+  ip_based       => true,
+  port           => '80',
+  docroot        => '/var/www/subdomain',
+  aliases        => $arAliases,
+  directoryindex => 'disabled',
+  options        => [ '+Indexes' ],
+  directories => [
+    { path => "$szKickStartImageDirectory", options => [ '+Indexes' ], },
+  ],
 }
 
 
