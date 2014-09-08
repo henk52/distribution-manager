@@ -53,9 +53,6 @@ $arAliases = [
   }
 ]  
 
-#file { "$szKickStartBaseDirectory":
-#  ensure => directory,
-#}
 
 # TODO Should this also be moved to the boot server module?
 file { "$szHieraConfigsDir":
@@ -63,10 +60,6 @@ file { "$szHieraConfigsDir":
   require => File [ "$szKickStartBaseDirectory" ],
 }
 
-#file { "$szKickStartImageDirectory":
-#  ensure => directory,
-#  require => File [ "$szKickStartBaseDirectory" ],
-#}
 
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
   ensure  => present,
@@ -86,7 +79,22 @@ $hNfsExports = {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
+ "$szKickStartImageDirectory" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
 }
+
+
+# rsync is needed by LXC for getting some of the files.
+include rsync::server
+
+# The 'linux' added to the end, is for the mirror of the Fedora repos
+# TODO V make the '/linux' configurable.
+rsync::server::module{ 'fedora':
+  path    => "$szKickStartImageDirectory/linux",
+}
+
 
 # TODO C depend lighttpd on the GIT class
 #class { 'lighttpd':
@@ -169,7 +177,9 @@ package { 'firewalld':
 
 class { 'bootserver':
 #  szIpAddressForSupportingKickStart => $szIpAddressForDHCPServer,
-#  szClassCSubnetAddress => $szIpAddressSubnet,
-  szWebProcessOwnerName => $szWebProcessOwnerName,
+#  szClassCSubnetAddress   => $szIpAddressSubnet,
+  szWebProcessOwnerName    => $szWebProcessOwnerName,
+  szKickStartBaseDirectory => $szKickStartBaseDirectory,
+  szKickStartImageDir      => $szKickStartImageDirectory,
   require        => Class ['apache'],
 }
