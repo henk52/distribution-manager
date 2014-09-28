@@ -21,6 +21,8 @@ $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
 $szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
 
+$szKickStartExtraRepos = '/var/ks/extrarepos'
+
 $szGitTopDir = '/var/git'
 
 $szWebStorageDir = '/var/webstorage'
@@ -50,7 +52,20 @@ $arAliases = [
   {
     alias => '/images',
     path  => "$szKickStartImageDirectory",
-  }
+  },
+  {
+    alias => '/isoimages',
+    path  => "/var/ks/images",
+  },
+  {
+    alias => '/extrarepos',
+    path  => "$szKickStartExtraRepos",
+  },
+  {
+    alias => '/rhel/4.4',
+    path  => "$szKickStartExtraRepos/cloudstack_4.4",
+  },
+
 ]  
 
 
