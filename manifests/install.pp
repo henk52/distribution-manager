@@ -54,6 +54,10 @@ $arAliases = [
     path  => "$szKickStartImageDirectory",
   },
   {
+    alias => '/configs',
+    path  => "/var/ks/configs",
+  },
+  {
     alias => '/isoimages',
     path  => "/var/ks/images",
   },
@@ -63,6 +67,10 @@ $arAliases = [
   },
   {
     alias => '/rhel/4.4',
+    path  => "$szKickStartExtraRepos/cloudstack_4.4",
+  },
+  {
+    alias => '/systemvm/4.4',
     path  => "$szKickStartExtraRepos/cloudstack_4.4",
   },
 
