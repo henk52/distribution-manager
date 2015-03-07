@@ -118,6 +118,14 @@ rsync::server::module{ 'fedora':
   path    => "$szKickStartImageDirectory/linux",
 }
 
+# RSYNC server
+rsync::server::module{ 'extrarepo':
+  path      => "$szKickStartExtraRepos",
+  require   => File[ "$szKickStartExtraRepos" ],
+  read_only => 'yes',
+  list      => 'yes',
+}
+
 
 # TODO C depend lighttpd on the GIT class
 #class { 'lighttpd':
@@ -212,3 +220,4 @@ class { 'bootserver':
   szKickStartImageDir      => $szKickStartImageDirectory,
   require        => Class ['apache'],
 }
+
