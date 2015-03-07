@@ -119,7 +119,7 @@ rsync::server::module{ 'fedora':
 }
 
 # RSYNC server
-rsync::server::module{ 'extrarepo':
+rsync::server::module{ 'extrarepos':
   path      => "$szKickStartExtraRepos",
   require   => File[ "$szKickStartExtraRepos" ],
   read_only => 'yes',
