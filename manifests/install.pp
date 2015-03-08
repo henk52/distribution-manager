@@ -126,6 +126,13 @@ rsync::server::module{ 'extrarepos':
   list      => 'yes',
 }
 
+rsync::server::module{ 'webstorage':
+  path      => "$szWebStorageDir",
+  require   => File[ "$szWebStorageDir" ],
+  read_only => 'yes',
+  list      => 'yes',
+}
+
 
 # TODO C depend lighttpd on the GIT class
 #class { 'lighttpd':
