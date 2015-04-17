@@ -119,6 +119,14 @@ rsync::server::module{ 'fedora':
 }
 
 # RSYNC server
+# TODO fix it so that this is what is actualy read from hiera.
+rsync::server::module{ 'images':
+  path      => "$szKickStartBaseDirectory/images",
+  read_only => 'yes',
+  list      => 'yes',
+}
+# TODO why does it work for extrareois and not this?  require   => File[ "$szKickStartBaseDirectory/images" ],
+
 rsync::server::module{ 'extrarepos':
   path      => "$szKickStartExtraRepos",
   require   => File[ "$szKickStartExtraRepos" ],
