@@ -46,6 +46,23 @@ $szWebStorageDir = '/var/webstorage'
 # Directory where the hiera conf files are stored.
 $szHieraConfigsDir = '/var/hieraconfs'
 
+
+  #if $szNetworkInterfaceName not set then set it
+  if ( $szNetworkInterfaceName == '' ) {
+  #  # Facter: interfaces (Array of interfaces), grab the secodn entry.
+    notify{ "Network interface name not set.": }
+    $arInterfaceList = split($interfaces, ',')
+    $szNicName = $arInterfaceList[1]
+  } else {
+    $szNicName = $szNetworkInterfaceName
+  }
+
+  network::if::static { "$szNicName":
+    ensure    => 'up',
+    ipaddress => "$szRepoWebHostAddr",
+    netmask   => '255.255.255.0',
+  }
+
 file { "$szWebStorageDir":
   ensure => directory,
 }
