@@ -20,12 +20,18 @@
 #   External Node Classifier as a comma separated list of hostnames." (Note,
 #   global variables should be avoided in favor of class parameters as
 #   of Puppet 2.6.)
+#  szAdminNicName
+#    Name of the NIC used for administration.
+#    Defaults to first NIC.
 #
 # === Examples
 #
 # class { distribution-manager: }
 
 class distribution-manager (
+  $szAdminNicName = hiera( 'AdminNicName', '' ),
+  $szAdminHostAddr = hiera('IpAddressForAdministration'),
+  $szAdminGatewayAddr = hiera('GatewayForAdministration'),
   $szNetworkInterfaceName = hiera( 'NetworkInterfaceName', '' ),
   $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart'),
   $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks'),
@@ -47,12 +53,12 @@ $szWebStorageDir = '/var/webstorage'
 $szHieraConfigsDir = '/var/hieraconfs'
 
 
+    $arInterfaceList = split($interfaces, ',')
   #if $szNetworkInterfaceName not set then set it
   if ( $szNetworkInterfaceName == '' ) {
   #  # Facter: interfaces (Array of interfaces), grab the secodn entry.
-    notify{ "Network interface name not set.": }
-    $arInterfaceList = split($interfaces, ',')
     $szNicName = $arInterfaceList[1]
+    notify{ "Service Network interface name not specified. Defaults to: $szNicName": }
   } else {
     $szNicName = $szNetworkInterfaceName
   }
@@ -61,6 +67,21 @@ $szHieraConfigsDir = '/var/hieraconfs'
     ensure    => 'up',
     ipaddress => "$szRepoWebHostAddr",
     netmask   => '255.255.255.0',
+  }
+
+  if ( $szAdminNicName == '' ) {
+  #  # Facter: interfaces (Array of interfaces), grab the secodn entry.
+    $szAdmNicName = $arInterfaceList[0]
+    notify{ "Admin Network interface name not specified. Defaults to: $szAdmNicName": }
+  } else {
+    $szNicName = $szAdminNicName
+  }
+
+  network::if::static { "$szAdmNicName":
+    ensure    => 'up',
+    ipaddress => "$szAdminHostAddr",
+    netmask   => '255.255.255.0',
+    gateway   => "$szAdminGatewayAddr",
   }
 
 file { "$szWebStorageDir":
