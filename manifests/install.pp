@@ -20,6 +20,7 @@ $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
 $szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
+$szKickStartMirrorBaseDirectory = hiera('KickStartMirrorBaseDirectory', "$szKickStartBaseDirectory/mirror")
 
 $szKickStartExtraRepos = '/var/ks/extrarepos'
 
@@ -103,6 +104,10 @@ $hNfsExports = {
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
  "$szKickStartImageDirectory" => {
+             'NfsOptionList' => "$szDefaultNfsOptionList",
+             'NfsClientList' => "$szDefaultNfsClientList",
+                                        }, 
+ "$szKickStartMirrorBaseDirectory" => {
              'NfsOptionList' => "$szDefaultNfsOptionList",
              'NfsClientList' => "$szDefaultNfsClientList",
                                         }, 
