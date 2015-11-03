@@ -20,6 +20,9 @@ Dependencies
 1. git clone https://github.com/henk52/bootserver.git
 1. git clone https://github.com/henk52/henk52-nfsserver.git nfsserver
 1. git clone https://github.com/henk52/gitserver.git
+1. mkdir /etc/puppet/data
+1. cp /etc/puppet/modules/distribution-manager/hiera.yaml /etc/puppet
+1. 
 
 Configuring the target node:
   wget http://10.1.2.3:/hieraconfs/git_web_host_conf.yaml -O /etc/puppet/data/defaults.yaml
