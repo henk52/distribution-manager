@@ -1,0 +1,10 @@
+---
+IpAddressForSupportingKickStart: '10.1.2.3'
+NetworkAddress: '10.1.2'
+DefaultNfsClientList: '10.1.2.0/255.255.255.0'
+RepoWebHostAddress: '10.1.2.3'
+KickStartBaseDirectory: '/var/ks'
+KickStartImageDirectory: '/home/ks/repo'
+KickStartIsoBaseDirectory: '/var/ks/images'
+KickStartExtrasDirectory: '/var/ks/extrarepos'
+KickStartMirrorBaseDirectory: '/home/ks/centos_mirror'
