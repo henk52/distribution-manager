@@ -24,7 +24,7 @@ Dependencies
 Configuring the target node:
   wget http://10.1.2.3:/hieraconfs/git_web_host_conf.yaml -O /etc/puppet/data/defaults.yaml
 
-= TROUBLESHOOTING =
+# TROUBLESHOOTING
 
 Add the missing "options => [ '+Indexes' ]" to the directory I was trying to CURL from.
 
