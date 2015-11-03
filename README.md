@@ -9,17 +9,17 @@ Dependencies
 
 # Instalation
 
-1 cd /etc/puppet/modules
-1 git clone https://github.com/henk52/distribution-manager.git
-1 git clone https://github.com/jpopelka/puppet-firewalld.git firewalld
+1. cd /etc/puppet/modules
+1. git clone https://github.com/henk52/distribution-manager.git
+1. git clone https://github.com/jpopelka/puppet-firewalld.git firewalld
   * https://forge.puppetlabs.com/jpopelka/firewalld
   * https://jpopelka.fedorapeople.org/puppet-firewalld/doc/firewalld/service.html
-1 git clone https://github.com/puppetlabs/puppetlabs-apache.git apache
-1 git clone https://github.com/puppetlabs/puppetlabs-concat.git concat
-1 git clone https://github.com/puppetlabs/puppetlabs-stdlib.git stdlib
-1 git clone https://github.com/henk52/bootserver.git
-1 git clone https://github.com/henk52/henk52-nfsserver.git nfsserver
-1 git clone https://github.com/henk52/gitserver.git
+1. git clone https://github.com/puppetlabs/puppetlabs-apache.git apache
+1. git clone https://github.com/puppetlabs/puppetlabs-concat.git concat
+1. git clone https://github.com/puppetlabs/puppetlabs-stdlib.git stdlib
+1. git clone https://github.com/henk52/bootserver.git
+1. git clone https://github.com/henk52/henk52-nfsserver.git nfsserver
+1. git clone https://github.com/henk52/gitserver.git
 
 Configuring the target node:
   wget http://10.1.2.3:/hieraconfs/git_web_host_conf.yaml -O /etc/puppet/data/defaults.yaml
