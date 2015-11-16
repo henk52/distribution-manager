@@ -19,6 +19,7 @@ $szWebProcessOwnerName = 'apache'
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
+# images, are structures, extracted from DVDs/ISO images.
 $szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
 $szKickStartMirrorBaseDirectory = hiera('KickStartMirrorBaseDirectory', "$szKickStartBaseDirectory/mirrors")
 
@@ -53,6 +54,10 @@ $arAliases = [
   {
     alias => '/images',
     path  => "$szKickStartImageDirectory",
+  },
+  {
+    alias => '/mirrors',
+    path  => "$szKickStartMirrorBaseDirectory",
   },
   {
     alias => '/configs',
