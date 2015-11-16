@@ -179,6 +179,7 @@ apache::vhost { 'subdomain.example.com':
   options        => [ '+Indexes' ],
   directories => [
     { path => "$szKickStartImageDirectory", options => [ '+Indexes' ], },
+    { path => "$szKickStartMirrorBaseDirectory", options => [ '+Indexes' ], },
   ],
 }
 
