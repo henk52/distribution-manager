@@ -1,3 +1,4 @@
+TODO V Remove the /home/ks/repo dir, since it has been replaced with /home/ks/mirrors
 TODO C Autogenerate the /var/www/subdomain/mirrorlist
 TODO C Later make it a CGI so that it can reply depending on arch and version.
 TODO C figure out how to fix the Firewall not allowing sunrpc(111/tcp)

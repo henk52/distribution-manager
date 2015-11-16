@@ -20,7 +20,7 @@ $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
 $szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
-$szKickStartMirrorBaseDirectory = hiera('KickStartMirrorBaseDirectory', "$szKickStartBaseDirectory/mirror")
+$szKickStartMirrorBaseDirectory = hiera('KickStartMirrorBaseDirectory', "$szKickStartBaseDirectory/mirrors")
 
 $szKickStartExtraRepos = '/var/ks/extrarepos'
 
