@@ -118,7 +118,7 @@ file { "$szHieraConfigsDir":
 file { "$szHieraConfigsDir/git_web_host_conf.yaml":
   ensure  => present,
   require => File [ "$szHieraConfigsDir" ],
-  content => template('distribution-manager/git_web_host_conf_yaml.erb'),
+  content => template('distribution-manager::git_web_host_conf_yaml.erb'),
 }
 
 $szDefaultNfsOptionList =  'ro,no_root_squash'

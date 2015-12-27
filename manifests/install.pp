@@ -19,8 +19,10 @@ $szWebProcessOwnerName = 'apache'
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
-$szKickStartImageDirectory = hiera('KickStartImageDirectory', "$szKickStartBaseDirectory/images")
-$szKickStartMirrorBaseDirectory = hiera('KickStartMirrorBaseDirectory', "$szKickStartBaseDirectory/mirror")
+$szKickStartImageDirectory
+  = hiera('KickStartImageDirectory', "${szKickStartBaseDirectory}/images")
+$szKickStartMirrorBaseDirectory
+  = hiera('KickStartMirrorBaseDirectory', "${szKickStartBaseDirectory}/mirror")
 
 $szKickStartExtraRepos = '/var/ks/extrarepos'
 
@@ -33,84 +35,85 @@ $szHieraConfigsDir = '/var/hieraconfs'
 
 # TODO C define the GIT user.
 
-file { "$szWebStorageDir":
+file { "${szWebStorageDir}":
   ensure => directory,
 }
 
 $arAliases = [
-  { 
+  {
     alias => '/git',
-    path  => "$szGitTopDir",
+    path  => "${szGitTopDir}",
   },
-  { 
+  {
     alias => '/storage',
-    path  => "$szWebStorageDir",
+    path  => "${szWebStorageDir}",
   },
   {
     alias => '/hieraconfs',
-    path  => "$szHieraConfigsDir",
+    path  => "${szHieraConfigsDir}",
   },
   {
     alias => '/images',
-    path  => "$szKickStartImageDirectory",
+    path  => "${szKickStartImageDirectory}",
   },
   {
     alias => '/configs',
-    path  => "/var/ks/configs",
+    path  => '/var/ks/configs',
   },
   {
     alias => '/isoimages',
-    path  => "/var/ks/images",
+    path  => '/var/ks/images',
   },
   {
     alias => '/extrarepos',
-    path  => "$szKickStartExtraRepos",
+    path  => "${szKickStartExtraRepos}",
   },
   {
     alias => '/rhel/4.4',
-    path  => "$szKickStartExtraRepos/cloudstack_4.4",
+    path  => "${szKickStartExtraRepos}/cloudstack_4.4",
   },
   {
     alias => '/systemvm/4.4',
-    path  => "$szKickStartExtraRepos/cloudstack_4.4",
+    path  => "${szKickStartExtraRepos}/cloudstack_4.4",
   },
 
-]  
+]
 
 
 # TODO Should this also be moved to the boot server module?
-file { "$szHieraConfigsDir":
-  ensure => directory,
-  require => File [ "$szKickStartBaseDirectory" ],
+file { "${szHieraConfigsDir}":
+  ensure  => directory,
+  require => File["${szKickStartBaseDirectory}"],
 }
 
 
-file { "$szHieraConfigsDir/git_web_host_conf.yaml":
+file { "${szHieraConfigsDir}/git_web_host_conf.yaml":
   ensure  => present,
-  require => File [ "$szHieraConfigsDir" ],
-  content => template('distribution-manager/git_web_host_conf_yaml.erb'),
+  require => File["${szHieraConfigsDir}"],
+  content => inline_template("---\nRepoWebHostAddress: '<%= @szRepoWebHostAddr %>'"),
 }
+  #content => template('distribution-manager/git_web_host_conf_yaml.erb'),
 
 $szDefaultNfsOptionList =  'ro,no_root_squash'
 $szDefaultNfsClientList = hiera ( 'DefaultNfsClientList' )
 
 $hNfsExports = {
- "$szKickStartBaseDirectory/configs" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
- "$szKickStartBaseDirectory" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
- "$szKickStartImageDirectory" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
- "$szKickStartMirrorBaseDirectory" => {
-             'NfsOptionList' => "$szDefaultNfsOptionList",
-             'NfsClientList' => "$szDefaultNfsClientList",
-                                        }, 
+  "${szKickStartBaseDirectory}/configs" => {
+    'NfsOptionList' => "${szDefaultNfsOptionList}",
+    'NfsClientList' => "${szDefaultNfsClientList}",
+                                        },
+  "${szKickStartBaseDirectory}" => {
+    'NfsOptionList' => "${szDefaultNfsOptionList}",
+    'NfsClientList' => "${szDefaultNfsClientList}",
+                                        },
+  "${szKickStartImageDirectory}" => {
+    'NfsOptionList' => "${szDefaultNfsOptionList}",
+    'NfsClientList' => "${szDefaultNfsClientList}",
+                                        },
+  "${szKickStartMirrorBaseDirectory}" => {
+    'NfsOptionList' => "${szDefaultNfsOptionList}",
+    'NfsClientList' => "${szDefaultNfsClientList}",
+                                        },
 }
 
 
@@ -120,28 +123,29 @@ include rsync::server
 # The 'linux' added to the end, is for the mirror of the Fedora repos
 # TODO V make the '/linux' configurable.
 rsync::server::module{ 'fedora':
-  path    => "$szKickStartImageDirectory/linux",
+  path    => "${szKickStartImageDirectory}/linux",
 }
 
 # RSYNC server
 # TODO fix it so that this is what is actualy read from hiera.
 rsync::server::module{ 'images':
-  path      => "$szKickStartBaseDirectory/images",
+  path      => "${szKickStartBaseDirectory}/images",
   read_only => 'yes',
   list      => 'yes',
 }
-# TODO why does it work for extrareois and not this?  require   => File[ "$szKickStartBaseDirectory/images" ],
+# TODO why does it work for extrareois and not this?
+#  require   => File[ "${szKickStartBaseDirectory}/images" ],
 
 rsync::server::module{ 'extrarepos':
-  path      => "$szKickStartExtraRepos",
-  require   => File[ "$szKickStartExtraRepos" ],
+  path      => "${szKickStartExtraRepos}",
+  require   => File[ "${szKickStartExtraRepos}" ],
   read_only => 'yes',
   list      => 'yes',
 }
 
 rsync::server::module{ 'webstorage':
-  path      => "$szWebStorageDir",
-  require   => File[ "$szWebStorageDir" ],
+  path      => "${szWebStorageDir}",
+  require   => File[ "${szWebStorageDir}" ],
   read_only => 'yes',
   list      => 'yes',
 }
@@ -150,7 +154,7 @@ rsync::server::module{ 'webstorage':
 # TODO C depend lighttpd on the GIT class
 #class { 'lighttpd':
 #  harAliasMappings => $arAliases,
-#  szWebProcessOwnerName => $szWebProcessOwnerName,
+#  {szWebProcessOwnerName} => ${szWebProcessOwnerName},
 #}
 
 
@@ -162,46 +166,52 @@ class { 'apache':
 
 
 
-# TODO C Move the 'directories' directive from a harcode, to a configurable thing.
+# TODO C Move the 'directories' directive from a harcode,
+#  to a configurable thing.
 apache::vhost { 'subdomain.example.com':
   ensure         => present,
-  ip             => "$szRepoWebHostAddr",
+  ip             => "${szRepoWebHostAddr}",
   ip_based       => true,
   port           => '80',
   docroot        => '/var/www/subdomain',
   aliases        => $arAliases,
   directoryindex => 'disabled',
   options        => [ '+Indexes' ],
-  directories => [
-    { path => "$szKickStartImageDirectory", options => [ '+Indexes' ], },
+  directories    => [
+    {
+      path    => "${szKickStartImageDirectory}",
+      options => [ '+Indexes' ],
+    },
   ],
 }
 
 
 class { 'nfsserver':
-   hohNfsExports => $hNfsExports,
+  hohNfsExports => $hNfsExports,
 #  NfsExport => $arNfsExports,
 }
 
-# TODO V Add this to both class instantiation:  szWebProcessOwnerName =>  
+# TODO V Add this to both class instantiation:  {szWebProcessOwnerName} =>  
 class { 'gitserver':
-  szWebServerPackage    => "$szWebServerPackage",
-  szWebProcessOwnerName => "$szWebProcessOwnerName",
-  szGitDirectory        => "$szGitTopDir",
-  require               => Class ["$szWebServerPackage"],
+  szWebServerPackage    => "${szWebServerPackage}",
+  szWebProcessOwnerName => "${szWebProcessOwnerName}",
+  szGitDirectory        => "${szGitTopDir}",
+  require               => Class['apache'],
+  #require               => Class ["${szWebServerPackage}"],
 }
 
 class { 'bst':
-  szWebProcessOwnerName     => "$szWebProcessOwnerName",
-  szKickStartBaseDirectory  => "$szKickStartBaseDirectory",
-  szKickStartImageDirectory => "$szKickStartImageDirectory",
+  szWebProcessOwnerName     => "${szWebProcessOwnerName}",
+  szKickStartBaseDirectory  => "${szKickStartBaseDirectory}",
+  szKickStartImageDirectory => "${szKickStartImageDirectory}",
 }
 
 # TODO C open the Firewalld ports.
 #firewalld::zone { 'public':
 #  services => ['ssh', 'vnc-server'],
 #}
-##  services => ['ssh', 'dhcp', 'dns', 'http', 'nfs', 'rpc-bind', 'tftp', 'vnc-server'],
+##  services => ['ssh', 'dhcp', 'dns', 'http', 'nfs',
+##               'rpc-bind', 'tftp', 'vnc-server'],
 #
 #firewalld::zone { 'internal':
 #  interfaces => [ 'enp3s0' ],
@@ -214,12 +224,12 @@ class { 'bst':
 #}
 
 service { 'firewalld':
-  enable => false,
   ensure => stopped,
+  enable => false,
 }
 
 
-# TODO C Remove before launch. This is suppose to be part of the firewalld class.
+# TODO C Remove before launch. This is suppose to be part of the firewalld class
 # This is a workaround to the error of missing Package support.
 #  See: https://github.com/jpopelka/puppet-firewalld/issues/1
 package { 'firewalld':
@@ -238,6 +248,6 @@ class { 'bootserver':
   szWebProcessOwnerName    => $szWebProcessOwnerName,
   szKickStartBaseDirectory => $szKickStartBaseDirectory,
   szKickStartImageDir      => $szKickStartImageDirectory,
-  require        => Class ['apache'],
+  require                  => Class['apache'],
 }
 
