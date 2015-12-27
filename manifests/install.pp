@@ -19,10 +19,11 @@ $szWebProcessOwnerName = 'apache'
 $szRepoWebHostAddr = hiera('IpAddressForSupportingKickStart')
 
 $szKickStartBaseDirectory = hiera('KickStartBaseDirectory', '/var/ks')
+# images, are structures, extracted from DVDs/ISO images.
 $szKickStartImageDirectory
   = hiera('KickStartImageDirectory', "${szKickStartBaseDirectory}/images")
 $szKickStartMirrorBaseDirectory
-  = hiera('KickStartMirrorBaseDirectory', "${szKickStartBaseDirectory}/mirror")
+  = hiera('KickStartMirrorBaseDirectory', "${szKickStartBaseDirectory}/mirrors")
 
 $szKickStartExtraRepos = '/var/ks/extrarepos'
 
@@ -55,6 +56,10 @@ $arAliases = [
   {
     alias => '/images',
     path  => "${szKickStartImageDirectory}",
+  },
+  {
+    alias => '/mirrors',
+    path  => "$szKickStartMirrorBaseDirectory",
   },
   {
     alias => '/configs',
@@ -177,11 +182,9 @@ apache::vhost { 'subdomain.example.com':
   aliases        => $arAliases,
   directoryindex => 'disabled',
   options        => [ '+Indexes' ],
-  directories    => [
-    {
-      path    => "${szKickStartImageDirectory}",
-      options => [ '+Indexes' ],
-    },
+  directories => [
+    { path => "$szKickStartImageDirectory", options => [ '+Indexes' ], },
+    { path => "$szKickStartMirrorBaseDirectory", options => [ '+Indexes' ], },
   ],
 }
 
