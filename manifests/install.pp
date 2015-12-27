@@ -34,6 +34,38 @@ $szWebStorageDir = '/var/webstorage'
 # Directory where the hiera conf files are stored.
 $szHieraConfigsDir = '/var/hieraconfs'
 
+$szNetworkInterfaceName = hiera( 'NetworkInterfaceName', '' ) 
+$szServiceIpAddress = hiera( 'IpAddressForSupportingKickStart', '172.16.1.3' )
+  #if $szNetworkInterfaceName not set then set it 
+if ( $szNetworkInterfaceName == '' ) { 
+  # # Facter: interfaces (Array of interfaces), grab the second entry.
+  notify{ "Network interface name not set.": } 
+  $arInterfaceList = split($interfaces, ',')
+  $szNicName = $arInterfaceList[1] 
+} else { 
+  $szNicName = $szNetworkInterfaceName 
+}
+notify{ "NIC: $szNicName ( $szServiceIpAddress )": }
+
+network::if::static { "${szNicName}":
+  ensure    => 'up',
+  ipaddress => "${szServiceIpAddress}",
+  netmask   => '255.255.255.0',
+}
+
+# Set SE Linux to allow everything, but keep tracking.
+file_line { 'set_selinux_permisive':
+  path => '/etc/selinux/config',
+  line => 'SELINUX=permissive',
+  match => '^SELINUX=enforcing'
+}
+
+exec { 'temporarily_set_selinux_permisive':
+  command => 'setenforce 0',
+  onlyif  => 'sestatus | grep mode  | grep -q enforcing',
+  path    => ['/usr/sbin','/usr/bin'],
+}
+
 # TODO C define the GIT user.
 
 file { "${szWebStorageDir}":
@@ -167,6 +199,7 @@ rsync::server::module{ 'webstorage':
 # all vhosts below.
 class { 'apache':
   default_vhost => false,
+  require       => Exec['temporarily_set_selinux_permisive'],
 }
 
 
@@ -192,6 +225,7 @@ apache::vhost { 'subdomain.example.com':
 class { 'nfsserver':
   hohNfsExports => $hNfsExports,
 #  NfsExport => $arNfsExports,
+  require       => Exec['temporarily_set_selinux_permisive'],
 }
 
 # TODO V Add this to both class instantiation:  {szWebProcessOwnerName} =>  
@@ -203,10 +237,12 @@ class { 'gitserver':
   #require               => Class ["${szWebServerPackage}"],
 }
 
+# TODO N find out if this is really dependens on selinux permisive.
 class { 'bst':
   szWebProcessOwnerName     => "${szWebProcessOwnerName}",
   szKickStartBaseDirectory  => "${szKickStartBaseDirectory}",
   szKickStartImageDirectory => "${szKickStartImageDirectory}",
+  require                   => Exec['temporarily_set_selinux_permisive'],
 }
 
 # TODO C open the Firewalld ports.
