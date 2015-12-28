@@ -242,6 +242,7 @@ class { 'bst':
   szWebProcessOwnerName     => "${szWebProcessOwnerName}",
   szKickStartBaseDirectory  => "${szKickStartBaseDirectory}",
   szKickStartImageDirectory => "${szKickStartImageDirectory}",
+  szKickStartMirrorDirectory => "${szKickStartMirrorBaseDirectory}",
   require                   => Exec['temporarily_set_selinux_permisive'],
 }
 
