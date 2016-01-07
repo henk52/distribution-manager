@@ -30,6 +30,12 @@ Dependencies
 Configuring the target node:
   wget http://10.1.2.3:/hieraconfs/git_web_host_conf.yaml -O /etc/puppet/data/defaults.yaml
 
+## local installtion 
+Installing from local repos without internet access.
+
+1. cd /etc/puppet/modules
+1. git clone git@dm:/var/git/distribution-manager.git
+
 # TROUBLESHOOTING
 
 Add the missing "options => [ '+Indexes' ]" to the directory I was trying to CURL from.
