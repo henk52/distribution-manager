@@ -30,6 +30,11 @@ Dependencies
 Configuring the target node:
   wget http://10.1.2.3:/hieraconfs/git_web_host_conf.yaml -O /etc/puppet/data/defaults.yaml
 
+IpAddressForSupportingKickStart: 192.168.2.3
+NetworkAddress: '192.168.2'
+DefaultNfsClientList: '192.168.2.0/255.255.255.0'
+
+
 ## local installtion 
 Installing from local repos without internet access.
 
@@ -54,3 +59,13 @@ curl -L -f "http://10.1.233.3/images/linux/releases/20/Everything/x86_64/os/Pack
 curl: (22) The requested URL returned error: 403 Forbidden
 
 http://stackoverflow.com/questions/21346486/how-to-show-directory-index-in-apache-2-4-with-custom-document-root
+
+#### Error: Evaluation Error: Error while evaluating a Resource Statement, Invalid resource type file_line
+you need to also install the puppetlabs stdlib.
+See:  https://forge.puppetlabs.com/puppetlabs/stdlib
+
+Error: Evaluation Error: Error while evaluating a Resource Statement, Invalid resource type file_line at /etc/puppet/modules/distribution_manager/manifests/init.pp:116:1 on node XYBOT
+
+#### Error: Validation of File_line[set_selinux_permisive] failed:
+You need stdlib, minimum version 4.10.0
+Error: Validation of File_line[set_selinux_permisive] failed: When providing a 'match' parameter, the value must be a regex that matches against the value of your 'line' parameter at /etc/puppet/modules/distribution_manager/manifests/init.pp:116

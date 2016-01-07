@@ -71,6 +71,55 @@ file { '/etc/puppet/modules/rsync':
 }
 
 # stdlib
+$szStdLibDirName = 'puppetlabs-stdlib-4.10.0'
+$szStdLibTarName = "$szStdLibDirName.tar.gz"
+
+exec { 'get_stdlib_module':
+  command => "wget http://dm/storage/puppet/$szStdLibTarName",
+  cwd     => '/etc/puppet/modules',
+  creates => "/etc/puppet/modules/$szStdLibTarName",
+  path    => '/usr/bin',
+}
+
+exec { 'unpack_stdlib_module':
+  command => "tar -zxf $szStdLibTarName",
+  cwd     => '/etc/puppet/modules',
+  creates => "/etc/puppet/modules/$szStdLibDirName",
+  path    => '/usr/bin',
+  require => Exec['get_stdlib_module'],
+}
+
+file { '/etc/puppet/modules/stdlib':
+  ensure  => link,
+  target  => "/etc/puppet/modules/$szStdLibDirName",
+  require => Exec['unpack_stdlib_module'],
+}
+
+# xinetd
+$szXinetdDirName = 'puppetlabs-xinetd-1.3.1'
+$szXinetdTarName = "$szXinetdDirName.tar.gz"
+
+exec { 'get_xinetd_module':
+  command => "wget http://dm/storage/puppet/$szXinetdTarName",
+  cwd     => '/etc/puppet/modules',
+  creates => "/etc/puppet/modules/$szXinetdTarName",
+  path    => '/usr/bin',
+}
+
+exec { 'unpack_xinetd_module':
+  command => "tar -zxf $szXinetdTarName",
+  cwd     => '/etc/puppet/modules',
+  creates => "/etc/puppet/modules/$szXinetdDirName",
+  path    => '/usr/bin',
+  require => Exec['get_xinetd_module'],
+}
+
+file { '/etc/puppet/modules/xinetd':
+  ensure  => link,
+  target  => "/etc/puppet/modules/$szXinetdDirName",
+  require => Exec['unpack_xinetd_module'],
+}
+
 # puppet module install razorsedge-network
 $szNetworkDirName = 'razorsedge-network-3.6.0'
 $szNetworkTarName = "$szNetworkDirName.tar.gz"
