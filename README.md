@@ -4,10 +4,14 @@ distribution-manager
 Distribution Manager: CLI administrated Kickstart server with GIT
 
 
+# Instalation
+puppet apply /etc/puppet/modules/distribution_manager/tests/init.pp
+
+
+
 Dependencies
 ============
 
-# Instalation
 
 1. cd /etc/puppet/modules
 1. git clone https://github.com/henk52/distribution-manager.git
